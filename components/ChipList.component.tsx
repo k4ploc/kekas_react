@@ -45,6 +45,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-evenly", // Ajusta la distribución
+    marginTop:10,
+    marginBottom:10
   },
   chip: {
     margin: 4, // Espacio entre chips
