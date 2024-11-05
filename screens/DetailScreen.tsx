@@ -1,96 +1,99 @@
 // screens/DetailsScreen.js
-import React, { useState } from "react";
-import {
-  Alert,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { Button, Checkbox, MD3DarkTheme, TextInput } from "react-native-paper";
 import ChipList from "../components/ChipList.component";
 import PreparationList from "../components/preparation/PreparationList";
 
+type Ingrediente = { id: number; label: string; value: string };
 const DetailsScreen = ({ route }) => {
   const { id } = route.params;
-  const [selectedId, setSelectedId] = useState(id);
   const [checked, setChecked] = useState(false);
   const [ingredienteExtraCheck, setIngredienteExtraCheck] = useState(false);
-  const [ingredienteSelected, setIngredienteSelected] = useState(0);
+
+  const [ingredienteSelected, setIngredienteSelected] = useState<Ingrediente>({
+    id: 0,
+    label: "",
+    value: "",
+  });
   const [text, setText] = useState("");
 
   const items = [
-   
-    { type: 'checkbox', value: 'check1', label: 'Check 1' },
-    { type: 'checkbox', value: 'check2', label: 'Check 2' },
-    { type: 'checkbox', value: 'check3', label: 'Check 3' },
-    { type: 'radio', value: 'option1', label: 'Opción 1' },
-    { type: 'radio', value: 'option2', label: 'Opción 2' },
-    { type: 'radio', value: 'option3', label: 'Opción 3' },
+    { type: "checkbox", value: "queso", label: "Queso" },
+    { type: "checkbox", value: "crema", label: "Crema" },
+    { type: "checkbox", value: "lechuga", label: "Lechuga" },
+    { type: "checkbox", value: "nopales", label: "Nopales" },
+    { type: "radio", value: "salsa_verde", label: "Salsa Verde" },
+    { type: "radio", value: "salsa_roja", label: "Salsa Roja" },
+    { type: "radio", value: "sin_salsa", label: "Sin salsa" },
   ];
-  
-  //preparacion component
-  const [selectedRadio, setSelectedRadio] = useState(null); 
-  const [selectedChecks, setSelectedChecks] = useState({}); 
-  const handleSelectionChange = (radioValue, checkValues) => { 
-    setSelectedRadio(radioValue); 
-    setSelectedChecks(checkValues); 
-  }; 
-  
-  const getSelectedValues = () => { 
-    const selectedCheckboxes = Object.keys(selectedChecks).filter((key) => selectedChecks[key]); 
-    Alert.alert('Selected Values', `Radio: ${selectedRadio}\nCheckboxes: ${selectedCheckboxes.join(', ')}`);
-  } 
-  //preparacion component end
-   
+
+  const [selectedRadio, setSelectedRadio] = useState(null);
+  const [selectedChecks, setSelectedChecks] = useState({});
+
+  const handleSelectionChange = (radioValue, checkValues) => {
+    setSelectedRadio(radioValue);
+    setSelectedChecks(checkValues);
+  };
+
+  const getSelectedValues = () => {
+    const selectedCheckboxes = Object.keys(selectedChecks).filter(
+      (key) => selectedChecks[key]
+    );
+    Alert.alert(
+      "Selected Values",
+      `Chip: ${
+        ingredienteSelected.value
+      }\nQueso Extra: ${checked}\nIngrediente Extra: ${ingredienteExtraCheck}\nInput: ${text}\nRadio: ${selectedRadio}\nCheckboxes: ${selectedCheckboxes.join(
+        ", "
+      )}`
+    );
+  };
 
   const handleChipSelect = (item) => {
-    console.log("Selected item:", item.label, item.value);
-    console.log("Selected  :", item.isSelected);
-    console.log("Selected  3:", item);
-    setIngredienteSelected(item.id);
-    // Si el ingrediente seleccionado es 6, desmarca "Queso Extra"
+    setIngredienteSelected(item);
     if (item.id === 6) {
       setChecked(false);
     }
   };
+
+  useEffect(() => {
+    if (ingredienteSelected.id === 6) {
+      setChecked(false);
+    }
+  }, [ingredienteSelected]);
+
+  const CheckboxItem = ({ label, isChecked, onPress }) => (
+    <Pressable style={styles.checkboxTouchable} onPress={onPress}>
+      <Checkbox
+        status={isChecked ? "checked" : "unchecked"}
+        onPress={onPress}
+      />
+      <Text style={styles.checkboxLabel}>{label}</Text>
+    </Pressable>
+  );
+
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Selecciona cantidad</Text>
       <Text style={styles.title}>Selecciona ingrediente</Text>
-      <ChipList selectedId={selectedId} onSelect={handleChipSelect} />
+      <ChipList selectedId={id} onSelect={handleChipSelect} />
       <View style={styles.checkboxContainer}>
-        {id === 1 && ingredienteSelected !== 6 && (
-          <Pressable
-            style={styles.checkboxTouchable}
-            onPress={() => {
-              setChecked(!checked);
-            }}
-          >
-            <Checkbox
-              status={checked ? "checked" : "unchecked"}
-              onPress={() => {
-                setChecked(!checked);
-              }}
-            />
-            <Text style={styles.checkboxLabel}>Queso Extra</Text>
-          </Pressable>
+        {id === 1 && ingredienteSelected.id !== 6 && (
+          <CheckboxItem
+            label="Queso Extra"
+            isChecked={checked}
+            onPress={() => setChecked(!checked)}
+          />
         )}
-        <Pressable
-          style={styles.checkboxTouchable}
+        <CheckboxItem
+          label="Ingrediente Extra"
+          isChecked={ingredienteExtraCheck}
           onPress={() => {
             setIngredienteExtraCheck(!ingredienteExtraCheck);
             setText("");
           }}
-        >
-          <Checkbox
-            status={ingredienteExtraCheck ? "checked" : "unchecked"}
-            onPress={() => {
-              setIngredienteExtraCheck(!ingredienteExtraCheck);
-            }}
-          />
-          <Text style={styles.checkboxLabel}>Ingrediente Extra</Text>
-        </Pressable>
+        />
       </View>
 
       {ingredienteExtraCheck && (
@@ -99,16 +102,16 @@ const DetailsScreen = ({ route }) => {
           label="Ingrediente extra"
           value={text}
           onChangeText={(text) => setText(text)}
+          style={styles.textInput}
         />
       )}
 
-      <Text style={styles.title}>Preparacion</Text>
-
-      <PreparationList items={items} onSelectionChange={handleSelectionChange} /> 
-      <Button onPress={getSelectedValues} >Get Selected Values </Button>
-
-      {/*<Text>Details Screen</Text>
-      <Text>ID: {id}</Text>*/}
+      <Text style={styles.title}>Preparación</Text>
+      <PreparationList
+        items={items}
+        onSelectionChange={handleSelectionChange}
+      />
+      <Button onPress={getSelectedValues}>Get Selected Values</Button>
     </View>
   );
 };
@@ -142,5 +145,13 @@ const styles = StyleSheet.create({
     //padding: 3,
   },
   checkboxLabel: { fontSize: 16, textTransform: "uppercase" },
+  textInput: {
+    width: "100%",
+
+    //padding: 8,
+    // marginVertical: 16,
+    // borderWidth: 1,
+    // borderColor: "#000",
+  },
 });
 export default DetailsScreen;

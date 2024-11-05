@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { RadioButton, Checkbox } from 'react-native-paper';
+import React, { useEffect, useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Checkbox, RadioButton } from "react-native-paper";
 
 const PreparationList = ({ items, onSelectionChange }) => {
   const [selectedRadio, setSelectedRadio] = useState(null);
@@ -24,7 +24,7 @@ const PreparationList = ({ items, onSelectionChange }) => {
   return (
     <View>
       {items.map((item) => {
-        if (item.type === 'radio') {
+        if (item.type === "radio") {
           return (
             <Pressable
               key={item.value}
@@ -33,12 +33,13 @@ const PreparationList = ({ items, onSelectionChange }) => {
             >
               <RadioButton
                 value={item.value}
-                status={selectedRadio === item.value ? 'checked' : 'unchecked'}
+                status={selectedRadio === item.value ? "checked" : "unchecked"}
+                onPress={() => handleRadioPress(item.value)}
               />
               <Text style={styles.text}>{item.label}</Text>
             </Pressable>
           );
-        } else if (item.type === 'checkbox') {
+        } else if (item.type === "checkbox") {
           return (
             <Pressable
               key={item.value}
@@ -46,7 +47,7 @@ const PreparationList = ({ items, onSelectionChange }) => {
               onPress={() => handleCheckboxPress(item.value)}
             >
               <Checkbox
-                status={selectedChecks[item.value] ? 'checked' : 'unchecked'}
+                status={selectedChecks[item.value] ? "checked" : "unchecked"}
               />
               <Text style={styles.text}>{item.label}</Text>
             </Pressable>
@@ -60,12 +61,12 @@ const PreparationList = ({ items, onSelectionChange }) => {
 
 const styles = StyleSheet.create({
   item: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   text: {
-    fontSize:18
-  //  marginLeft: 8,
+    fontSize: 18,
+    //  marginLeft: 8,
   },
 });
 
