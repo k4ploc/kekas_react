@@ -13,12 +13,14 @@ const data = [
   {
     id: 1,
     label: "Quesadilla",
+    price:21,
     imgUrl:
       "https://www.maricruzavalos.com/wp-content/uploads/2022/03/mexican-quesadillas-fritas.jpg",
   },
   {
     id: 2,
     label: "Tostada",
+    price:20,
     imgUrl:
       "https://www.cocinaconalegria.com/wp-content/themes/yootheme/cache/89/Img16478-89975e90.webp",
   },
@@ -26,12 +28,14 @@ const data = [
   {
     id: 3,
     label: "Pambazo",
+    price:20,
     imgUrl:
       "https://i.blogs.es/a33478/copia-de-portada---2024-09-02t102449.946/1366_2000.jpg",
   },
   {
     id: 4,
     label: "Sope",
+    price:20,
     imgUrl:
       "https://gastronomiamexicana.wordpress.com/wp-content/uploads/2015/02/sopes.jpg",
   },
@@ -39,12 +43,14 @@ const data = [
   {
     id: 5,
     label: "Gordita",
+    price:20,
     imgUrl:
       "https://mexicotravelchannel.com.mx/wp-content/uploads/2021/04/gorditas-mexico-travel.jpg",
   },
   {
     id: 6,
     label: "Refresco",
+    price:20,
     imgUrl:
       "https://thefoodtech.com/wp-content/uploads/2020/05/bebidas-azucaradas.jpg",
   },
@@ -61,7 +67,7 @@ const CardList = ({ navigation }) => {
       style={styles.item}
       // onPress={() => console.log(item.id)}
       onPress={() =>
-        navigation.navigate("Details", { id: item.id, title: item.label })
+        navigation.navigate("Details", { id: item.id, title: item.label, price:item.price })
       }
     >
       <Card style={styles.card}>

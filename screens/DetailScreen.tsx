@@ -4,12 +4,15 @@ import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { Button, Checkbox, MD3DarkTheme, TextInput } from "react-native-paper";
 import ChipList from "../components/ChipList.component";
 import PreparationList from "../components/preparation/PreparationList";
+import CounterComponent from "../components/counter/CounterCompoent";
 
 type Ingrediente = { id: number; label: string; value: string };
 const DetailsScreen = ({ route }) => {
-  const { id } = route.params;
+  const { id, price } = route.params;
   const [checked, setChecked] = useState(false);
+  const [precioQuesoExtra, setPrecioQuesoExtra] = useState(0);
   const [ingredienteExtraCheck, setIngredienteExtraCheck] = useState(false);
+  const [counterValue, setCounterValue] = useState(0);
 
   const [ingredienteSelected, setIngredienteSelected] = useState<Ingrediente>({
     id: 0,
@@ -17,6 +20,10 @@ const DetailsScreen = ({ route }) => {
     value: "",
   });
   const [text, setText] = useState("");
+
+  const handleValueChange = (value) => {
+    setCounterValue(value);
+  };
 
   const items = [
     { type: "checkbox", value: "queso", label: "Queso" },
@@ -42,11 +49,11 @@ const DetailsScreen = ({ route }) => {
     );
     Alert.alert(
       "Selected Values",
-      `Chip: ${
+      `Cantidad:${counterValue}\nChip: ${
         ingredienteSelected.value
       }\nQueso Extra: ${checked}\nIngrediente Extra: ${ingredienteExtraCheck}\nInput: ${text}\nRadio: ${selectedRadio}\nCheckboxes: ${selectedCheckboxes.join(
         ", "
-      )}`
+      )}\nSubtotal:${(price + precioQuesoExtra) * counterValue}`
     );
   };
 
@@ -76,6 +83,7 @@ const DetailsScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Selecciona cantidad</Text>
+      <CounterComponent initialValue={1} onValueChange={handleValueChange} />
       <Text style={styles.title}>Selecciona ingrediente</Text>
       <ChipList selectedId={id} onSelect={handleChipSelect} />
       <View style={styles.checkboxContainer}>
@@ -83,7 +91,10 @@ const DetailsScreen = ({ route }) => {
           <CheckboxItem
             label="Queso Extra"
             isChecked={checked}
-            onPress={() => setChecked(!checked)}
+            onPress={() => {
+              setChecked(!checked);
+              setPrecioQuesoExtra(checked ? 0 : 2);
+            }}
           />
         )}
         <CheckboxItem
@@ -111,6 +122,9 @@ const DetailsScreen = ({ route }) => {
         items={items}
         onSelectionChange={handleSelectionChange}
       />
+
+      <Text>Precio: ${(price+precioQuesoExtra)* counterValue}</Text>
+
       <Button onPress={getSelectedValues}>Get Selected Values</Button>
     </View>
   );
