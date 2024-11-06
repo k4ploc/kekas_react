@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { Button, Checkbox, MD3DarkTheme, TextInput } from "react-native-paper";
 import ChipList from "../components/ChipList.component";
-import PreparationList from "../components/preparation/PreparationList";
 import CounterComponent from "../components/counter/CounterCompoent";
+import PreparationList from "../components/preparation/PreparationList";
 
 type Ingrediente = { id: number; label: string; value: string };
 const DetailsScreen = ({ route }) => {
@@ -123,20 +123,25 @@ const DetailsScreen = ({ route }) => {
         onSelectionChange={handleSelectionChange}
       />
 
-      <Text>Precio: ${(price+precioQuesoExtra)* counterValue}</Text>
-
-      <Button onPress={getSelectedValues}>Get Selected Values</Button>
+      <View style={styles.footer}>
+        <Text style={styles.priceText}>
+          Precio: ${((price + precioQuesoExtra) * counterValue).toFixed(2)}
+        </Text>
+        <Button mode="contained" onPress={getSelectedValues}>
+          Get Selected Values
+        </Button>
+      </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    //flex: 1,
+    flex: 1,
     //justifyContent: "center",
     //alignItems: "center",
     backgroundColor: "#FFF",
-    borderWidth: 1,
-    borderColor: "#000",
+    //borderWidth: 1,
+    // borderColor: "#000",
   },
   title: {
     fontSize: 20,
@@ -167,5 +172,19 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: "#000",
   },
+  footer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 8,
+    //borderTopWidth: 1,
+    //borderColor: "#000",
+    backgroundColor: "#fff",
+  },
+  priceText: { fontSize: 18 },
 });
 export default DetailsScreen;

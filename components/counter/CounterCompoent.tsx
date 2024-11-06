@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Button, Icon, MD3Colors } from 'react-native-paper';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Button, Icon } from "react-native-paper";
 
 const CounterComponent = ({ initialValue = 0, onValueChange }) => {
   const [count, setCount] = useState(initialValue);
@@ -15,19 +15,11 @@ const CounterComponent = ({ initialValue = 0, onValueChange }) => {
   return (
     <View style={styles.container}>
       <Button mode="contained" onPress={decrement} style={styles.button}>
-         <Icon
-    source="minus"
-    color="#FFF"
-    size={20}
-  />
+        <Icon source="minus" color="#FFF" size={20} />
       </Button>
       <Text style={styles.count}>{count}</Text>
       <Button mode="contained" onPress={increment} style={styles.button}>
-      <Icon
-    source="plus"
-    color="#FFF"
-    size={20}
-  />
+        <Icon source="plus" color="#FFF" size={20} />
       </Button>
     </View>
   );
@@ -35,10 +27,10 @@ const CounterComponent = ({ initialValue = 0, onValueChange }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent:"flex-start",
-    borderWidth:1
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    // borderWidth:1
   },
   button: {
     margin: 5,
