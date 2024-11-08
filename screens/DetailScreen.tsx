@@ -71,7 +71,7 @@ const DetailsScreen = ({ route }) => {
         onSelectionChange={(radioValue, checkValues, extraCost) => {
           setSelectedRadio(radioValue);
           setSelectedChecks(checkValues);
-          setPrecioQuesoExtra(price + extraCost);
+          setPrecioQuesoExtra(extraCost);
         }}
         isQuesoDisabled={isQuesoDisabled}
       />
