@@ -1,60 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Checkbox, RadioButton } from "react-native-paper";
+import usePreparationSelection from "../../hooks/PreparationSelection";
 
-const PreparationList = ({ items, onSelectionChange }) => {
-  const [selectedRadio, setSelectedRadio] = useState(null);
-  const [selectedChecks, setSelectedChecks] = useState({});
-
-  const handleRadioPress = (value) => {
-    setSelectedRadio(value);
-  };
-
-  const handleCheckboxPress = (value) => {
-    setSelectedChecks((prev) => ({
-      ...prev,
-      [value]: !prev[value],
-    }));
-  };
-
-  useEffect(() => {
-    onSelectionChange(selectedRadio, selectedChecks);
-  }, [selectedRadio, selectedChecks]);
+const PreparationList = ({ onSelectionChange, idMenu, isQuesoDisabled }) => {
+  const {
+    items,
+    selectedRadio,
+    selectedChecks,
+    handleRadioPress,
+    handleCheckboxPress,
+  } = usePreparationSelection(onSelectionChange, idMenu, isQuesoDisabled);
 
   return (
     <View>
-      {items.map((item) => {
-        if (item.type === "radio") {
-          return (
-            <Pressable
-              key={item.value}
-              style={styles.item}
+      {items.map((item) => (
+        <Pressable
+          key={item.value}
+          style={styles.item}
+          onPress={() =>
+            item.type === "radio"
+              ? handleRadioPress(item.value)
+              : handleCheckboxPress(item.value)
+          }
+        >
+          {item.type === "radio" ? (
+            <RadioButton
+              value={item.value}
+              status={selectedRadio === item.value ? "checked" : "unchecked"}
               onPress={() => handleRadioPress(item.value)}
-            >
-              <RadioButton
-                value={item.value}
-                status={selectedRadio === item.value ? "checked" : "unchecked"}
-                onPress={() => handleRadioPress(item.value)}
-              />
-              <Text style={styles.text}>{item.label}</Text>
-            </Pressable>
-          );
-        } else if (item.type === "checkbox") {
-          return (
-            <Pressable
-              key={item.value}
-              style={styles.item}
+            />
+          ) : (
+            <Checkbox
+              status={selectedChecks[item.value] ? "checked" : "unchecked"}
               onPress={() => handleCheckboxPress(item.value)}
-            >
-              <Checkbox
-                status={selectedChecks[item.value] ? "checked" : "unchecked"}
-              />
-              <Text style={styles.text}>{item.label}</Text>
-            </Pressable>
-          );
-        }
-        return null;
-      })}
+            />
+          )}
+          <Text style={styles.text}>{item.label}</Text>
+        </Pressable>
+      ))}
     </View>
   );
 };
@@ -66,7 +50,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    //  marginLeft: 8,
   },
 });
 
